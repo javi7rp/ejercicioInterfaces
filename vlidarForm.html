@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+
+    <h1>VALIDAR FORMULARIO</h1>
+
+    <form id="form">
+        <label>Nombre:</label>
+        <input type="text" id="nombre">
+        <br>
+        <label>Edad:</label>
+        <input type="number" id="edad">
+        <br>
+        <label>Correo electronico:</label>
+        <input type="text" id="correo">
+
+        <button type="button" onclick="validar()">VALIDAR</button>
+    </form>
+
+    <p id="mensaje"></p>
+
+    <script>
+        function validar() {
+            const nombre = document.getElementById('nombre').value;
+            const edad = document.getElementById('edad').value;
+            const correo = document.getElementById('correo').value;
+            const msj = document.getElementById('mensaje');
+            msj.innerText = '';
+
+            if(nombre === "" || edad === "" || correo === ""){
+                msj.innerText = 'DEBES RELLENAR LOS CAMPOS';
+                return;
+            }
+
+            if(nombre.length <= 3){
+                msj.innerText = 'EL NOMBRE DEBE TENER MAS DE 3 CARACTERES';
+                return;
+            }
+
+            const edadInt = parseInt(edad);
+            if(isNaN(edadInt) || edadInt < 0 || edadInt > 120){
+                msj.innerText = 'LA EDAD DEBE SER UN NUMERO ENTRE 0 Y 120';
+                return;
+            }
+            const emailValidar = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if(!emailValidar.test(correo)){
+                msj.innerText = 'EL CORREO NO ES VALIDO';
+                return;
+            }
+            msj.innerText = 'DATOS INTRODUCIDOS CORRECTAMENTE';
+        }
+
+        
+       
+    </script>
+
+</body>
+</html>

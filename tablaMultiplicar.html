@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+
+<body>
+
+    <h1>TABLA DE MULTIPLICAR</h1>
+
+    <label>Selecciona un numero para imprimir su tabla de multiplicar:</label>
+    <select id="n" onchange="generarTabla()">
+    <option value="0">0</option>
+    <option value="1">1</option>
+    <option value="2">2</option>
+    <option value="3">3</option>
+    <option value="4">4</option>
+    <option value="5">5</option>
+    <option value="6">6</option>
+    <option value="7">7</option>
+    <option value="8">8</option>
+    <option value="9">9</option>
+    </select>
+
+    <h2 id="tablaName"></h2>
+    <div id="tabla"></div>
+    
+
+    <script>
+    function generarTabla(){
+        const n = document.getElementById('n').value;
+        const tabla = document.getElementById('tabla');
+        const tablaName = document.getElementById('tablaName');
+        const ul = document.createElement('ul');
+
+        tabla.innerText = '';
+        tablaName.textContent = `Tabla del ${n}`
+
+        for (let i = 1; i <=10; i++){
+            const li = document.createElement('li');
+          li.textContent = `${n} x ${i} = ${n * i}`;
+          ul.appendChild(li);
+        }
+
+        tabla.appendChild(ul)
+        
+    }
+
+    </script>
+
+</body>
+
+</html>

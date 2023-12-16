@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        #ejer10 {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>GENERADOR DE CONTRASEÑA</h1>
+
+    <div id="acertijo"></div>
+    <br>
+
+    <label for="longitud">Longitud de la contraseña (Mayor que 1):</label>
+    <input type="number" id="longitud" min="1">
+
+    <button onclick="generarContraseña()">GENERAR</button> 
+
+    <p>La contraseña generada es: </p>
+    <p id="contraseñaGenerada"></p>
+
+    <button id="ejer10" onclick="contarLetras()" >CONTAR VOCALES Y CONSONANTES</button> 
+
+    <p id="contadorLetras"></p>
+
+    <script>
+        function generarContraseña(){
+            document.getElementById('contraseñaGenerada').innerText = '';
+            document.getElementById('contadorLetras').innerText = '';
+            const l = document.getElementById('longitud').value;
+            const c = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*";
+
+            if(l >= 1){
+                let contraseña = '';
+
+                for(let i=0; i < l; i++){
+                    const cRandom = c.charAt(Math.floor(Math.random()*c.length));
+                    contraseña = contraseña + cRandom;
+                }
+
+                document.getElementById('contraseñaGenerada').innerText = `${contraseña}`;
+                document.getElementById('ejer10').style.display='block';
+            }
+
+
+        }
+
+        function contarLetras(){
+            const cadena = document.getElementById('contraseñaGenerada').innerText.toLowerCase();
+            //document.getElementById('contadorLetras').innerText = cadena;
+            let contVocal = 0;
+            let contConso = 0;
+            const vocales = 'aeiou';
+            const consonantes = 'bcdfghjklmnpqrstvwxyz'
+
+            for(let i=0; i < cadena.length; i++){
+                const c = cadena.charAt(i);
+                if(vocales.includes(c)){
+                    contVocal ++;
+                }else if(consonantes.includes(c)){
+                    contConso ++;
+                }
+            }
+
+            const cont = `La contraseña tiene ${contVocal} vocales y ${contConso} consonantes`;
+            document.getElementById('contadorLetras').innerText = cont;
+
+        }
+       
+    </script>
+
+</body>
+</html>

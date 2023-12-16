@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+
+<body>
+
+    <h1>PIEDRA PAPEL O TIJERA</h1>
+
+    <label>Selecciona una opcion:</label>
+    <select id="op">
+        <option value="pi">PIEDRA</option>
+        <option value="pa">PAPEL</option>
+        <option value="ti">TIJERA</option>
+    </select>
+    <button onclick="jugar()">JUGAR</button>
+
+    <p id="eleccionMaquina"></p>
+    <p id="resultado"></p>
+
+
+    <script>
+        function jugar() {
+            const op = document.getElementById('op').value;
+            const elecMaq_Text = document.getElementById('eleccionMaquina');
+            const r = document.getElementById('resultado');
+            const opciones = ['PIEDRA', 'PAPEL', 'TIJERA']
+            const op_maquina = opciones[Math.floor(Math.random() * opciones.length)];
+            switch (op_maquina) {
+                case 'PIEDRA':
+                    if(op == 'pi'){
+                        r.innerText = 'EMPATE'
+                    }else if(op == 'pa'){
+                        r.innerText = 'HAS GANADO'
+                    }else{
+                        r.innerText = 'HAS PERDIDO'
+                    }
+                    break;
+                case 'PAPEL':
+                    if(op == 'pi'){
+                        r.innerText = 'HAS PERDIDO'
+                    }else if(op == 'pa'){
+                        r.innerText = 'EMPATE'
+                    }else{
+                        r.innerText = 'HAS GANADO'
+                    }
+                    break;
+                case 'TIJERA':
+                    if(op == 'pi'){
+                        r.innerText = 'HAS GANADO'
+                    }else if(op == 'pa'){
+                        r.innerText = 'HAS PERDIDO'
+                    }else{
+                        r.innerText = 'EMPATE'
+                    }
+                    break;
+            }
+
+            elecMaq_Text.innerText = `La maquina ha elegido: ${op_maquina}` 
+
+        }
+
+    </script>
+
+</body>
+
+</html>

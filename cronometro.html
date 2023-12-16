@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+
+<body>
+
+    <h1>CRONOMETRO</h1>
+
+    <div id="timer">00:00</div>
+    <br><br>
+    <button onclick="comenzarTimer()">Comenzar</button>
+    <button onclick="stopTimer()">Parar</button>
+    <button onclick="resetTimer()">Resetear</button>
+
+    <script>
+        let minutos = 0;
+        let segundos = 0;
+        let timerInterval = null;
+
+        function comenzarTimer(){
+            if(timerInterval === null){
+                timerInterval = setInterval(updateTimer, 1000)
+            }
+        }
+        
+        function updateTimer(){
+            segundos++;
+            if(segundos == 60){
+                segundos = 0;
+                minutos++;
+                if(minutos == 60){
+                    minutos = 0;
+                }
+            }
+           // updateDisplay();
+            const newMinutos = String(minutos).padStart(2, '0');
+            const newSegundos = String(segundos).padStart(2, '0');
+            document.getElementById('timer').innerText = `${newMinutos}:${newSegundos}`;
+        }
+
+        function stopTimer(){
+            clearInterval(timerInterval);
+            timerInterval = null;
+        }
+
+        function resetTimer(){
+            stopTimer();
+            minutos = 0;
+            segundos = 0;
+            updateDisplay();
+        }
+
+        function updateDisplay() {
+      const newMinutos = String(minutos).padStart(2, '0'); //pasa a string y coge (2) valores de '0'
+      const newSegundos = String(segundos).padStart(2, '0');
+      document.getElementById('timer').innerText = `${newMinutos}:${newSegundos}`;
+    }
+
+
+    </script>
+
+</body>
+
+</html>

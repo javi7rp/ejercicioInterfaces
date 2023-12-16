@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+
+    <h1>ACERTIJO</h1>
+
+    <button onclick="generarAcertijo()">Generar Acertijo</button>
+    <p>Resuelve el siguiente acertijo:</p>
+
+    <div id="acertijo"></div>
+    <br>
+
+    <label for="respuesta">Tu respuesta:</label>
+    <input type="text" id="respuesta">
+
+    <button onclick="verificarRespuesta()">Verificar</button>
+
+    <p id="resultado"></p>
+
+    <script>
+        function generarAcertijo() {
+            document.getElementById('resultado').innerText = '';
+            const num1 = Math.floor(Math.random() * 10) + 1;
+            const num2 = Math.floor(Math.random() * 10) + 1;
+            const num3 = Math.floor(Math.random() * 10) + 1;
+
+            const operador1 = Math.random() < 0.5 ? '+' : '-';
+            const operador2 = Math.random() < 0.5 ? '+' : '-';
+
+            const acertijoText = `${num1} ${operador1} ${num2} ${operador2} ${num3}`;
+
+            document.getElementById('acertijo').innerText = acertijoText;
+            const respuestaCorrecta = eval(acertijoText);
+            console.log(respuestaCorrecta);
+            document.getElementById('respuesta').setAttribute('data-respuesta-correcta', respuestaCorrecta);
+        }
+
+        function verificarRespuesta() {
+
+            const respuestaUsuario = parseFloat(document.getElementById('respuesta').value);
+            const respuestaCorrecta = parseFloat(document.getElementById('respuesta').getAttribute('data-respuesta-correcta'));
+
+            if (!isNaN(respuestaUsuario)) { //comprobamos que el usuario introduzca un numero 
+                if (respuestaUsuario === respuestaCorrecta) {
+                    document.getElementById('resultado').innerText = 'CORRECTO!';
+                } else {
+                    document.getElementById('resultado').innerText = 'INCORRECTO! La respuesta correcta era: ' + respuestaCorrecta;
+                }
+            } else {
+                document.getElementById('resultado').innerText = 'INTRODUCE UN NUMERO';
+            }
+            
+        }
+        window.onload = generarAcertijo; //imprimir el primer acertijo 
+    </script>
+
+</body>
+</html>
