@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <style>
+        body {
+            justify-content: space-around;
+            text-align: center;
+            display: flex;
+        }
+        .userCard {
+            border: 3px rgb(31, 28, 185) solid;
+            margin-bottom: 10px;
+            margin-top: 10px;
+            padding: 5px;
+            text-align: center;
+            background-color: rgb(21, 228, 255);
+            width: 400px;
+        }
+
+        img {
+            border-radius: 50%;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div>
+        <h1>LISTADO DE POKEMON</h1>
+
+        <div id="pokemons"></div>
+        <p id="error"></p>
+
+    </div>
+    
+
+
+    <script>
+        const generateError = (mensaje) => {
+            document.getElementById("error").innerHTML = `<b>${mensaje}<b>`;
+        }
+
+        const getPokemon = async () => {
+            try {
+                const response = await fetch(' https://pokeapi.co/')
+                const data = await response.json()
+                return data.results
+            } catch (error) {
+                generateError("ERROR AL OBTENER LOS POKEMON")
+                return []
+            }
+        }
+
+        const mostrarPokemon = async () => {
+            const pokemons = document.getElementById('pokemons')
+            pokemons.innerText = ''
+
+            const pokemones = await getPokemon()
+            if(pokemones.length !== 0 ){
+                pokemones.forEach(pokemon => {
+                    const pokeDiv = document.createElement('div')
+                    pokeDiv.className = 'pokeCard'
+                    const pokeImage = document.createElement('img') //foto 
+                    const pokeName = document.createElement('p') //nombre
+                    const pokePeso = document.createElement('p') //peso
+                    const pokeExp = document.createElement('p') //experiencia
+                    const pokeHab = document.createElement('p') //habilidades
+
+                    pokeImage.src = pokemon.picture.large 
+                    pokeName.innerHTML = `<b>${pokemon.name}</b>`
+                    pokePeso.innerHTML = `<b>Peso : ${pokemon.height}</b>`
+                    pokeExp.innerHTML = `<b>Exp: ${pokemon.base_experience}</b>`
+                    //pokeHab.innerHTML = `<b>Habilidades: ${pokemon.base_experience}</b>`
+
+                    pokeDiv.appendChild(pokeImage)
+                    pokeDiv.appendChild(pokeName)
+                    pokeDiv.appendChild(pokePeso)
+                    pokeDiv.appendChild(pokeExp)
+                    //pokeDiv.appendChild(pokeHab)
+
+                    pokemons.appendChild(pokeDiv)
+
+                });
+            }
+        }
+
+        mostrarPokemon()
+
+
+    </script>
+
+</body>
+
+</html>

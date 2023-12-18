@@ -2,23 +2,139 @@
 <html lang="es">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <style>
+    
+    .peli {
+      width: 400px;
+      height: 500px;
+      border: 3px black solid;
+      margin-bottom: 10px;
+      margin-top: 10px;
+    }
+  </style>
 </head>
 
 <body>
 
-    <h1>PELICULAS</h1>
+  <h1>PELICULAS</h1>
+  <p>Introduce otro nombre de pelicula a buscar: </p>
+  <input type="text" id="bus" value="Pokemon">
+  <button id="btn_buscar" onclick="buscarPeliculas()">BUSCAR PELICULAS</button>
+  <button id="btn_buscar" onclick="buscarPeliculasAwait()">BUSCAR PELICULAS AWAIT</button>
 
 
-    <div id="peliculas"></div>
+  <div id="peliculas"></div>
+  <p id="error"></p>
 
 
   <script>
     const Api_Key = '93d0d05c2cb9ea9e06a08414504e2444'
+    const generatePeli = (peli) => {
+      const peliculas = document.getElementById('peliculas')
+      const div = document.createElement('div')
+      const title = document.createElement('h1')
+      const a = document.createElement('a')
+      const img = document.createElement("img")
+      const popular = document.createElement('p')
 
+
+      div.className = 'peli'
+
+      if (peli.homepage === "") {
+        title.innerText = peli.title
+      } else {
+        a.href = peli.homepage  //si tiene sitio web la peli 
+        a.innerText = peli.title //titulo de la peli 
+        title.appendChild(a)
+      }
+
+      popular.innerHTML = `<b>POPULARIDAD: ${peli.popularity}<b>`
+      console.log("popular: " + peli.popularity)
+
+      img.src = "https://image.tmdb.org/t/p/w500/" + peli.poster_path; //imagen de la pelicula
+      img.width = 200
+      div.appendChild(title)
+      div.appendChild(popular)
+      div.appendChild(img)
+      peliculas.appendChild(div)
+
+      console.log("Json de la pelicula: ", peli)
+    }
+
+    const generateError = (mensaje) => {
+      document.getElementById("error").innerHTML = `<b>${mensaje}<b>`;
+    }
+
+    const buscarPeliculas = () => {
+      const busqueda = document.getElementById('bus').value;
+      document.getElementById('peliculas').innerHTML = ''
+
+      if (!busqueda.trim()) {
+        generateError("Introduce un nombre valido")
+        return
+      }
+
+      console.clear()
+
+      fetch((`https://api.themoviedb.org/3/search/movie?api_key=${Api_Key}&language=es-ES&query=${busqueda}&page=1&include_adult=false`))
+        .then(response => response.json())
+        .then(pelis => {
+          if (pelis.results.length === 0) {
+            generateError("No se han encontrado peliculas con ese nombre")
+            return
+          }
+
+          pelis.results.forEach(element => {
+            fetch(`https://api.themoviedb.org/3/movie/${element.id}?api_key=${Api_Key}&language=en-US`)
+              .then(response => response.json())
+              .then(detail => generatePeli(detail))
+              .catch(() => {
+                generateError("Error al cargar los detalles")
+              })
+          })
+        }).catch((error) => { generateError(error) })
+    }
+
+    buscarPeliculas() //realizamos una llamada inicial a nuestra funcion 
+
+    //duplicar la funcion usando aync/await 
+    const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms))
+    const buscarPeliculasAwait = async () => {
+      const busqueda = document.getElementById('bus').value;
+      document.getElementById('peliculas').innerHTML = ''
+
+      if (!busqueda.trim()) {
+        generateError("Introduce un nombre valido")
+        return
+      }
+
+      console.clear()
+
+      try {
+                const response = await fetch(`https://api.themoviedb.org/3/search/movie?api_key=${Api_Key}&language=es-ES&query=${busqueda}&page=1&include_adult=false`);
+                const pelis = await response.json();
+
+                if (pelis.results.length === 0) {
+                    generateError("No se han encontrado peliculas con ese nombre");
+                    return;
+                }
+
+                for (const element of pelis.results) {
+                    const detailResponse = await fetch(`https://api.themoviedb.org/3/movie/${element.id}?api_key=${Api_Key}&language=en-US`);
+                    const detail = await detailResponse.json();
+                    generatePeli(detail);
+                    await sleep(500); //asi conseguimos que se vayan mostrando poco a poco 
+                }
+            } catch (error) {
+                generateError("Error al realizar la búsqueda");
+            }
+    }
 
   </script>
 
 </body>
+
 </html>
